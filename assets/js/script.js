@@ -21,7 +21,19 @@ const questionArray = [
     }
 ]
 
+var currentQuestion = 0;
+
+function gameOver(allQuestionsAnswered) {
+    console.log("great job")
+}
+
 function askQuestion(questionIndex) {
+    if (questionArray[questionIndex] == undefined) {
+        // oops, game over
+        gameOver(true)
+        return
+    }
+
     var questionArea = document.getElementById("question-area");
     questionArea.innerHTML = "" // cleared element
     
@@ -47,7 +59,8 @@ function chooseAnswer(event) {
         questionArea.appendChild(incorrect);
     }
 
-    setTimeout(askQuestion, 1000, 1)
+    currentQuestion++;
+    setTimeout(askQuestion, 1000, currentQuestion)
 }
 
 function createOptions(options, correctAnswerText, parent) {
@@ -69,7 +82,7 @@ function playGame(event) {
     questionArea.innerHTML = "" // cleared element
 
     // start first question
-    askQuestion(0)
+    askQuestion(currentQuestion)
 
 
     // for (var i = 0; i < questionArray.length; i++) {
