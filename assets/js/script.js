@@ -22,8 +22,6 @@ const questionArray = [
 ]
 
 function chooseAnswer(event) {
-    var answer = event.target.outerText
-
     if (event.target.getAttribute("correctAnswer")) {
         var correct = document.createElement("h3");
         correct.innerHTML = "Correct!";
@@ -32,6 +30,19 @@ function chooseAnswer(event) {
         var incorrect = document.createElement("h3");
         incorrect.innerHTML = "Wrong"
         document.querySelector("body").appendChild(incorrect);
+    }
+}
+
+function createOptions(options, correctAnswerText, parent) {
+    for (var i = 0; i < options.length; i++) {
+        var option = document.createElement("button");
+        option.innerHTML = options[i];
+        option.onclick = chooseAnswer;
+        
+        if (options[i] == correctAnswerText) {
+            option.setAttribute("correctAnswer", true);
+        }
+        parent.appendChild(option)
     }
 }
 
@@ -49,18 +60,7 @@ function playGame(event) {
 
         var correctAnswerText = questionArray[i].correctAnswer;
 
-        for (var j = 0; j < questionArray[i].options.length; j++) {
-            // i is the index of questions
-            // j is the index of options of the question that i is on
-            var currentQuestion = questionArray[i];
-            var option = document.createElement("button");
-            option.innerHTML = currentQuestion.options[j];
-            option.onclick = chooseAnswer;
-            if (currentQuestion.options[j] == correctAnswerText) {
-                option.setAttribute("correctAnswer", true);
-            }
-            questionArea.appendChild(option)
-        }
+        createOptions(questionArray[i].options, correctAnswerText, questionArea)
     }
 
 
