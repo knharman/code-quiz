@@ -32,6 +32,7 @@ const questionArray = [
 ]
 var currentQuestion = 0;
 var timer = 75;
+var hasClicked = false;
 
 function gameOver(allQuestionsAnswered) {
     if (allQuestionsAnswered) {
@@ -48,6 +49,8 @@ function askQuestion(questionIndex) {
         return
     }
 
+    hasClicked = false;
+
     var questionArea = document.getElementById("question-area");
     questionArea.innerHTML = "" // cleared element
     
@@ -63,6 +66,10 @@ function askQuestion(questionIndex) {
 function chooseAnswer(event) {
     var questionArea = document.getElementById("question-area");
 
+    if (hasClicked) {
+        return;
+    }
+
     if (event.target.getAttribute("correctAnswer")) {
         var correct = document.createElement("h3");
         correct.innerHTML = "Correct!";
@@ -73,6 +80,7 @@ function chooseAnswer(event) {
         questionArea.appendChild(incorrect);
         timer -= 10;
     }
+    hasClicked = true;
 
     currentQuestion++;
     setTimeout(askQuestion, 1000, currentQuestion)
