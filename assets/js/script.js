@@ -11,10 +11,12 @@ const questionArray = [
     },
     {
         question: "Which is the correct syntax in a for loop?",
-        optionA: "for (i=0, i<array.length, i++)",
-        optionB: "for (i=0; i<array.length, i++)",
-        optionC: "for (i=0; i>array.length, i++)",
-        optionD: "for (i=0; i<array.length, i--)",
+        options: [
+            "for (i=0, i&ltarray.length, i++)",
+            "for (i=0; i&ltarray.length, i++)",
+            "for (i=0; i>array.length, i++)",
+            "for (i=0; i&ltarray.length, i--)",
+        ],
         correctAnswer: "for (i=0; i<array.length, i++)",
     }
 ]
@@ -41,8 +43,9 @@ function playGame(event) {
     // run through questions
 
     for (var i = 0; i < questionArray.length; i++) {
-        var questionOne = document.createElement("h2");
-        questionOne.innerHTML = questionArray[i].question;
+        var question = document.createElement("h2");
+        question.innerHTML = questionArray[i].question;
+        questionArea.appendChild(question);
 
         var correctAnswerText = questionArray[i].correctAnswer;
 
@@ -58,9 +61,6 @@ function playGame(event) {
             }
             questionArea.appendChild(option)
         }
-
-        questionArea.appendChild(questionOne);
-
     }
 
 
