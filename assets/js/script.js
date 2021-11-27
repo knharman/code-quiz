@@ -21,6 +21,19 @@ const questionArray = [
     }
 ]
 
+function askQuestion(questionIndex) {
+    var questionArea = document.getElementById("question-area");
+    questionArea.innerHTML = "" // cleared element
+    
+    var question = document.createElement("h2");
+    question.innerHTML = questionArray[questionIndex].question;
+    questionArea.appendChild(question);
+
+    var correctAnswerText = questionArray[questionIndex].correctAnswer;
+
+    createOptions(questionArray[questionIndex].options, correctAnswerText, questionArea)
+}
+
 function chooseAnswer(event) {
     if (event.target.getAttribute("correctAnswer")) {
         var correct = document.createElement("h3");
@@ -31,6 +44,8 @@ function chooseAnswer(event) {
         incorrect.innerHTML = "Wrong"
         document.querySelector("body").appendChild(incorrect);
     }
+
+    askQuestion(1)
 }
 
 function createOptions(options, correctAnswerText, parent) {
@@ -38,7 +53,7 @@ function createOptions(options, correctAnswerText, parent) {
         var option = document.createElement("button");
         option.innerHTML = options[i];
         option.onclick = chooseAnswer;
-        
+
         if (options[i] == correctAnswerText) {
             option.setAttribute("correctAnswer", true);
         }
@@ -51,17 +66,19 @@ function playGame(event) {
     var questionArea = document.getElementById("question-area");
     questionArea.innerHTML = "" // cleared element
 
-    // run through questions
+    // start first question
+    askQuestion(0)
 
-    for (var i = 0; i < questionArray.length; i++) {
-        var question = document.createElement("h2");
-        question.innerHTML = questionArray[i].question;
-        questionArea.appendChild(question);
 
-        var correctAnswerText = questionArray[i].correctAnswer;
+    // for (var i = 0; i < questionArray.length; i++) {
+    //     var question = document.createElement("h2");
+    //     question.innerHTML = questionArray[i].question;
+    //     questionArea.appendChild(question);
 
-        createOptions(questionArray[i].options, correctAnswerText, questionArea)
-    }
+    //     var correctAnswerText = questionArray[i].correctAnswer;
+
+    //     createOptions(questionArray[i].options, correctAnswerText, questionArea)
+    // }
 
 
 }
