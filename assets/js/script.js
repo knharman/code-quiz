@@ -35,17 +35,19 @@ function askQuestion(questionIndex) {
 }
 
 function chooseAnswer(event) {
+    var questionArea = document.getElementById("question-area");
+
     if (event.target.getAttribute("correctAnswer")) {
         var correct = document.createElement("h3");
         correct.innerHTML = "Correct!";
-        document.querySelector("body").appendChild(correct);
+        questionArea.appendChild(correct);
     } else {
         var incorrect = document.createElement("h3");
         incorrect.innerHTML = "Wrong"
-        document.querySelector("body").appendChild(incorrect);
+        questionArea.appendChild(incorrect);
     }
 
-    askQuestion(1)
+    setTimeout(askQuestion, 1000, 1)
 }
 
 function createOptions(options, correctAnswerText, parent) {
