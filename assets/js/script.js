@@ -13,12 +13,22 @@ const questionArray = [
         question: "Which is the correct syntax in a for loop?",
         options: [
             "for (i=0, i&ltarray.length, i++)",
-            "for (i=0; i&ltarray.length, i++)",
-            "for (i=0; i>array.length, i++)",
-            "for (i=0; i&ltarray.length, i--)",
+            "for (i=0; i&ltarray.length; i++)",
+            "for (i=0; i>array.length; i++)",
+            "for (i=0; i&ltarray.length; i--)",
         ],
-        correctAnswer: "for (i=0; i<array.length, i++)",
-    }
+        correctAnswer: "for (i=0; i&ltarray.length; i++)",
+    },
+    {
+        question: "What keyword declares a variable that cannot have its value changed?",
+        options: [
+            "let",
+            "const",
+            "var",
+            "trim"
+        ],
+        correctAnswer: "const",
+    },
 ]
 var currentQuestion = 0;
 var timer = 75;
@@ -61,6 +71,7 @@ function chooseAnswer(event) {
         var incorrect = document.createElement("h3");
         incorrect.innerHTML = "Wrong"
         questionArea.appendChild(incorrect);
+        timer -= 10;
     }
 
     currentQuestion++;
