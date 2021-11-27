@@ -20,11 +20,15 @@ const questionArray = [
         correctAnswer: "for (i=0; i<array.length, i++)",
     }
 ]
-
 var currentQuestion = 0;
+var timer = 75;
 
 function gameOver(allQuestionsAnswered) {
-    console.log("great job")
+    if (allQuestionsAnswered) {
+        console.log("great job")
+    } else {
+        console.log("you ran out of time")
+    }
 }
 
 function askQuestion(questionIndex) {
@@ -76,6 +80,20 @@ function createOptions(options, correctAnswerText, parent) {
     }
 }
 
+function timerDecrement() {
+    if (timer <= 0) {
+        gameOver(false)
+        return;
+    }
+    timer--;
+    document.getElementById("timer").innerHTML = "Time: " + timer
+    startTimer();
+}
+
+function startTimer() {
+    setTimeout(timerDecrement, 1000)
+}
+
 function playGame(event) {
     // clear the question area
     var questionArea = document.getElementById("question-area");
@@ -84,17 +102,7 @@ function playGame(event) {
     // start first question
     askQuestion(currentQuestion)
 
-
-    // for (var i = 0; i < questionArray.length; i++) {
-    //     var question = document.createElement("h2");
-    //     question.innerHTML = questionArray[i].question;
-    //     questionArea.appendChild(question);
-
-    //     var correctAnswerText = questionArray[i].correctAnswer;
-
-    //     createOptions(questionArray[i].options, correctAnswerText, questionArea)
-    // }
-
+    startTimer()
 
 }
 
