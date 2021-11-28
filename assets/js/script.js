@@ -33,12 +33,51 @@ const questionArray = [
 var currentQuestion = 0;
 var timer = 75;
 var hasClicked = false;
+var timerShouldBeRunning = false;
 
-function gameOver(allQuestionsAnswered) {
+function congrats() {
+    var questionArea = document.getElementById("question-area");
+    questionArea.innerHTML = ""
+
+    var congratsMessage = document.createElement("h2");
+    congratsMessage.innerHTML = "All Done!";
+
+    var description = document.createElement("h4");
+    description.innerHTML = "Your final score is " + timer;
+
+    var form = document.createElement("form");
+    var initialsInput = document.createElement("input");
+    initialsInput.setAttribute("type", "text");
+    initialsInput.setAttribute("maxlength","3");
+
+    var submitButton = document.createElement("input");
+    submitButton.setAttribute("type", "button");
+    submitButton.setAttribute("value","Submit");
+    submitButton.onclick = setNewHighScore;
+
+    form.appendChild(initialsInput);
+    form.appendChild(submitButton);
+    questionArea.appendChild(congratsMessage);
+    questionArea.appendChild(description);
+    questionArea.appendChild(form);
+}
+
+function setNewHighScore(event) {
+    var initials = event.target.form[0].value
+    var highScore = timer;
+    localStorage.setItem("highScores", {initials, highScore});
+}
+
+function gameOver() {
+
+}
+
+function endGame(allQuestionsAnswered) {
+    timerShouldBeRunning = false;
     if (allQuestionsAnswered) {
-        console.log("great job")
+        congrats();
     } else {
-        console.log("you ran out of time")
+        gameOver();
     }
 }
 
@@ -91,7 +130,7 @@ function clearLocalStorage() {
 function askQuestion(questionIndex) {
     if (questionArray[questionIndex] == undefined) {
         // oops, game over
-        gameOver(true)
+        endGame(true)
         return
     }
 
@@ -146,8 +185,11 @@ function createOptions(options, correctAnswerText, parent) {
 }
 
 function timerDecrement() {
+    if (!timerShouldBeRunning) {
+        return;
+    }
     if (timer <= 0) {
-        gameOver(false)
+        endGame(false)
         return;
     }
     timer--;
@@ -156,6 +198,7 @@ function timerDecrement() {
 }
 
 function startTimer() {
+    timerShouldBeRunning = true;
     setTimeout(timerDecrement, 1000)
 }
 
@@ -170,8 +213,7 @@ function playGame(event) {
     // start first question
     askQuestion(currentQuestion)
 
-    startTimer()
-
+    startTimer();
 }
 
 function initializeGame() {
