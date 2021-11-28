@@ -63,14 +63,17 @@ function congrats() {
 }
 
 function setNewHighScore(event) {
-    var initials = event.target.form[0].value
+    var initials = event.target.form[0].value;
     var highScore = timer;
 
-    var currentHighScores = load("highScores")
+    var currentHighScores = load("highScores");
     currentHighScores.push({
         initials: initials,
         score: highScore
-    })
+    });
+    currentHighScores.sort(function (a, b) {
+        return b.score - a.score;
+    });
 
     store("highScores", currentHighScores);
     viewHighScores();
@@ -101,7 +104,7 @@ function load(key) {
 }
 
 function gameOver() {
-
+// to do
 }
 
 function endGame(allQuestionsAnswered) {
@@ -116,10 +119,18 @@ function endGame(allQuestionsAnswered) {
 function goBackHandler(event) {
     var div = document.querySelector("div");
     div.remove();
+    timer = 75;
     initializeGame();
 }
 
 function viewHighScores(event) {
+
+    var highScoreButton = document.getElementById("view-high-scores");
+
+    if (highScoreButton != null) {
+        highScoreButton.remove();
+    }
+
     var body = document.querySelector("body");
     var highScoreContainer = document.createElement("div");
 
@@ -131,32 +142,37 @@ function viewHighScores(event) {
 
     var orderedList = document.createElement("ol");
     
-    var highestScore = document.createElement("li");
-    highestScore.innerHTML = "KH 35";
-
-    var nextScore = document.createElement("li");
-    nextScore.innerHTML = "CP 31";
+    var currentHighScores = load("highScores");
+    for (i=0; i<currentHighScores.length; i++) {
+        var highestScore = document.createElement("li");
+        highestScore.innerHTML = currentHighScores[i].initials + " " + currentHighScores[i].score;
+        orderedList.appendChild(highestScore);
+    }
 
     var goBack = document.createElement("button");
     goBack.innerHTML = "Go Back"
     goBack.onclick = goBackHandler;
 
-    var clearHighScores = document.createElement ("button")
-    clearHighScores.innerHTML = "Clear High Scores";
-    clearHighScores.onclick = clearLocalStorage;
+    var clearHighScoresButton = document.createElement ("button")
+    clearHighScoresButton.innerHTML = "Clear High Scores";
+    clearHighScoresButton.onclick = clearHighScores;
 
     highScoreContainer.appendChild(highScore);
     highScoreContainer.appendChild(orderedList);
-    orderedList.appendChild(highestScore);
-    orderedList.appendChild(nextScore);
     highScoreContainer.appendChild(goBack);
-    highScoreContainer.appendChild(clearHighScores);
+    highScoreContainer.appendChild(clearHighScoresButton);
     body.appendChild(highScoreContainer);
 
 }
 
+function clearHighScores() {
+    clearLocalStorage();
+    var orderedList = document.querySelector("ol");
+    orderedList.innerHTML = "";
+}
+
 function clearLocalStorage() {
-    console.log("you made it this far")
+    store("highScores",[]);
 }
 
 function askQuestion(questionIndex) {
@@ -239,7 +255,7 @@ function playGame(event) {
     var questionArea = document.getElementById("question-area");
     questionArea.innerHTML = "" // cleared element
 
-    var highScoreButton = document.getElementById("view-high-score");
+    var highScoreButton = document.getElementById("view-high-scores");
     highScoreButton.remove();
 
     // start first question
@@ -249,7 +265,17 @@ function playGame(event) {
 }
 
 function initializeGame() {
+    // game setup
+    timer = 75;
+    document.getElementById("timer").innerHTML = "Time: " + timer
+    currentQuestion = 0;
+
     var mainSection = document.getElementById("question-area");
+
+    var highScoresButton = document.createElement("button");
+    highScoresButton.id = "view-high-scores"
+    highScoresButton.innerHTML = "View High Scores";
+    highScoresButton.onclick = viewHighScores;
 
     var title = document.createElement("h1");
     title.innerHTML = "Welcome to the Game!";
@@ -261,6 +287,7 @@ function initializeGame() {
     startGameButton.innerHTML = "Start Quiz"
     startGameButton.onclick = playGame;
 
+    document.querySelector("body").prepend(highScoresButton);
     mainSection.appendChild(title);
     mainSection.appendChild(explanation);
     mainSection.appendChild(startGameButton);
