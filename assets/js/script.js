@@ -65,7 +65,39 @@ function congrats() {
 function setNewHighScore(event) {
     var initials = event.target.form[0].value
     var highScore = timer;
-    localStorage.setItem("highScores", {initials, highScore});
+
+    var currentHighScores = load("highScores")
+    currentHighScores.push({
+        initials: initials,
+        score: highScore
+    })
+
+    store("highScores", currentHighScores);
+    viewHighScores();
+}
+
+/**
+ * Puts something into local storage.
+ * @param {String} key The key in which to store the value
+ * @param {Any} value The value to put in local storage
+ */
+function store(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+}
+
+/**
+ * Gets something from local storage.
+ * @param {String} key The key that contains the value
+ * @returns The value
+ */
+function load(key) {
+    var jsonValue = localStorage.getItem(key);
+
+    if (!jsonValue) {
+        return [];
+    }
+
+    return JSON.parse(jsonValue);
 }
 
 function gameOver() {
