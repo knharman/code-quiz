@@ -42,6 +42,52 @@ function gameOver(allQuestionsAnswered) {
     }
 }
 
+function goBackHandler(event) {
+    var div = document.querySelector("div");
+    div.remove();
+    initializeGame();
+}
+
+function viewHighScores(event) {
+    var body = document.querySelector("body");
+    var highScoreContainer = document.createElement("div");
+
+    var questionArea = document.getElementById("question-area");
+    questionArea.innerHTML = ""
+
+    var highScore = document.createElement("h2");
+    highScore.innerHTML = "High Scores";
+
+    var orderedList = document.createElement("ol");
+    
+    var highestScore = document.createElement("li");
+    highestScore.innerHTML = "KH 35";
+
+    var nextScore = document.createElement("li");
+    nextScore.innerHTML = "CP 31";
+
+    var goBack = document.createElement("button");
+    goBack.innerHTML = "Go Back"
+    goBack.onclick = goBackHandler;
+
+    var clearHighScores = document.createElement ("button")
+    clearHighScores.innerHTML = "Clear High Scores";
+    clearHighScores.onclick = clearLocalStorage;
+
+    highScoreContainer.appendChild(highScore);
+    highScoreContainer.appendChild(orderedList);
+    orderedList.appendChild(highestScore);
+    orderedList.appendChild(nextScore);
+    highScoreContainer.appendChild(goBack);
+    highScoreContainer.appendChild(clearHighScores);
+    body.appendChild(highScoreContainer);
+
+}
+
+function clearLocalStorage() {
+    console.log("you made it this far")
+}
+
 function askQuestion(questionIndex) {
     if (questionArray[questionIndex] == undefined) {
         // oops, game over
@@ -117,6 +163,9 @@ function playGame(event) {
     // clear the question area
     var questionArea = document.getElementById("question-area");
     questionArea.innerHTML = "" // cleared element
+
+    var highScoreButton = document.getElementById("view-high-score");
+    highScoreButton.remove();
 
     // start first question
     askQuestion(currentQuestion)
