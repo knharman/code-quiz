@@ -35,7 +35,140 @@ var timer = 75;
 var hasClicked = false;
 var timerShouldBeRunning = false;
 
-function congrats() {
+// Start Game
+function initializeGame() {
+    // game setup
+    timer = 75;
+    document.getElementById("timer").innerHTML = "Time: " + timer
+    currentQuestion = 0;
+
+    var mainSection = document.getElementById("question-area");
+
+    var highScoresButton = document.createElement("button");
+    highScoresButton.id = "view-high-scores"
+    highScoresButton.innerHTML = "View High Scores";
+    highScoresButton.onclick = viewHighScores;
+    highScoresButton.className = "scoresBtn"
+
+    var title = document.createElement("h1");
+    title.innerHTML = "Welcome to the Game!";
+
+    var explanation = document.createElement("p");
+    explanation.innerHTML = "Try to answer the following JavaScript questions before the timer runs out."
+
+    var startGameButton = document.createElement("button");
+    startGameButton.innerHTML = "Start Quiz"
+    startGameButton.onclick = playGame;
+    startGameButton.className = "startBtn";
+
+    document.querySelector("body").prepend(highScoresButton);
+    mainSection.appendChild(title);
+    mainSection.appendChild(explanation);
+    mainSection.appendChild(startGameButton);
+}
+
+function playGame(event) {
+    // clear the question area
+    var questionArea = document.getElementById("question-area");
+    questionArea.innerHTML = "" // cleared element
+
+    var highScoreButton = document.getElementById("view-high-scores");
+    highScoreButton.remove();
+
+    // start first question
+    askQuestion(currentQuestion)
+
+    startTimer();
+}
+
+// Play Game
+function askQuestion(questionIndex) {
+    if (questionArray[questionIndex] == undefined) {
+        // oops, game over
+        endGame(true)
+        return
+    }
+
+    hasClicked = false;
+
+    var questionArea = document.getElementById("question-area");
+    questionArea.innerHTML = "" // cleared element
+    
+    var question = document.createElement("h2");
+    question.innerHTML = questionArray[questionIndex].question;
+    questionArea.appendChild(question);
+
+    var correctAnswerText = questionArray[questionIndex].correctAnswer;
+
+    createOptions(questionArray[questionIndex].options, correctAnswerText, questionArea)
+}
+
+function startTimer() {
+    timerShouldBeRunning = true;
+    setTimeout(timerDecrement, 1000)
+}
+
+function timerDecrement() {
+    if (!timerShouldBeRunning) {
+        return;
+    }
+    if (timer <= 0) {
+        endGame(false)
+        return;
+    }
+    timer--;
+    document.getElementById("timer").innerHTML = "Time: " + timer
+    startTimer();
+}
+
+function createOptions(options, correctAnswerText, parent) {
+    for (var i = 0; i < options.length; i++) {
+        var option = document.createElement("button");
+        option.innerHTML = options[i];
+        option.onclick = chooseAnswer;
+        option.className = "optionBtn";
+
+        if (options[i] == correctAnswerText) {
+            option.setAttribute("correctAnswer", true);
+        }
+        parent.appendChild(option)
+    }
+}
+
+function chooseAnswer(event) {
+    var questionArea = document.getElementById("question-area");
+
+    if (hasClicked) {
+        return;
+    }
+
+    if (event.target.getAttribute("correctAnswer")) {
+        var correct = document.createElement("h3");
+        correct.innerHTML = "Correct!";
+        questionArea.appendChild(correct);
+    } else {
+        var incorrect = document.createElement("h3");
+        incorrect.innerHTML = "Wrong"
+        questionArea.appendChild(incorrect);
+        timer -= 10;
+    }
+    hasClicked = true;
+
+    currentQuestion++;
+    setTimeout(askQuestion, 1000, currentQuestion)
+}
+
+// End of Game
+function endGame(allQuestionsAnswered) {
+    timerShouldBeRunning = false;
+    if (allQuestionsAnswered) {
+        showAllDoneScreen();
+    } else {
+        showGameOverScreen();
+    }
+}
+
+function showAllDoneScreen() {
     var questionArea = document.getElementById("question-area");
     questionArea.innerHTML = ""
 
@@ -85,50 +218,12 @@ function setNewHighScore(event) {
     viewHighScores();
 }
 
-/**
- * Puts something into local storage.
- * @param {String} key The key in which to store the value
- * @param {Any} value The value to put in local storage
- */
-function store(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
-}
-
-/**
- * Gets something from local storage.
- * @param {String} key The key that contains the value
- * @returns The value
- */
-function load(key) {
-    var jsonValue = localStorage.getItem(key);
-
-    if (!jsonValue) {
-        return [];
-    }
-
-    return JSON.parse(jsonValue);
-}
-
-function gameOver() {
+function showGameOverScreen() {
 // to do
 }
 
-function endGame(allQuestionsAnswered) {
-    timerShouldBeRunning = false;
-    if (allQuestionsAnswered) {
-        congrats();
-    } else {
-        gameOver();
-    }
-}
 
-function goBackHandler(event) {
-    var div = document.querySelector("div");
-    div.remove();
-    timer = 75;
-    initializeGame();
-}
-
+// High Scores
 function viewHighScores(event) {
 
     var highScoreButton = document.getElementById("view-high-scores");
@@ -171,6 +266,13 @@ function viewHighScores(event) {
 
 }
 
+function goBackHandler(event) {
+    var div = document.querySelector("div");
+    div.remove();
+    timer = 75;
+    initializeGame();
+}
+
 function clearHighScores() {
     clearLocalStorage();
     var orderedList = document.querySelector("ol");
@@ -181,125 +283,29 @@ function clearLocalStorage() {
     store("highScores",[]);
 }
 
-function askQuestion(questionIndex) {
-    if (questionArray[questionIndex] == undefined) {
-        // oops, game over
-        endGame(true)
-        return
-    }
-
-    hasClicked = false;
-
-    var questionArea = document.getElementById("question-area");
-    questionArea.innerHTML = "" // cleared element
-    
-    var question = document.createElement("h2");
-    question.innerHTML = questionArray[questionIndex].question;
-    questionArea.appendChild(question);
-
-    var correctAnswerText = questionArray[questionIndex].correctAnswer;
-
-    createOptions(questionArray[questionIndex].options, correctAnswerText, questionArea)
+// Local Storage Helpers
+/**
+ * Puts something into local storage.
+ * @param {String} key The key in which to store the value
+ * @param {Any} value The value to put in local storage
+ */
+ function store(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
 }
 
-function chooseAnswer(event) {
-    var questionArea = document.getElementById("question-area");
+/**
+ * Gets something from local storage.
+ * @param {String} key The key that contains the value
+ * @returns The value
+ */
+function load(key) {
+    var jsonValue = localStorage.getItem(key);
 
-    if (hasClicked) {
-        return;
+    if (!jsonValue) {
+        return [];
     }
 
-    if (event.target.getAttribute("correctAnswer")) {
-        var correct = document.createElement("h3");
-        correct.innerHTML = "Correct!";
-        questionArea.appendChild(correct);
-    } else {
-        var incorrect = document.createElement("h3");
-        incorrect.innerHTML = "Wrong"
-        questionArea.appendChild(incorrect);
-        timer -= 10;
-    }
-    hasClicked = true;
-
-    currentQuestion++;
-    setTimeout(askQuestion, 1000, currentQuestion)
-}
-
-function createOptions(options, correctAnswerText, parent) {
-    for (var i = 0; i < options.length; i++) {
-        var option = document.createElement("button");
-        option.innerHTML = options[i];
-        option.onclick = chooseAnswer;
-        option.className = "optionBtn";
-
-        if (options[i] == correctAnswerText) {
-            option.setAttribute("correctAnswer", true);
-        }
-        parent.appendChild(option)
-    }
-}
-
-function timerDecrement() {
-    if (!timerShouldBeRunning) {
-        return;
-    }
-    if (timer <= 0) {
-        endGame(false)
-        return;
-    }
-    timer--;
-    document.getElementById("timer").innerHTML = "Time: " + timer
-    startTimer();
-}
-
-function startTimer() {
-    timerShouldBeRunning = true;
-    setTimeout(timerDecrement, 1000)
-}
-
-function playGame(event) {
-    // clear the question area
-    var questionArea = document.getElementById("question-area");
-    questionArea.innerHTML = "" // cleared element
-
-    var highScoreButton = document.getElementById("view-high-scores");
-    highScoreButton.remove();
-
-    // start first question
-    askQuestion(currentQuestion)
-
-    startTimer();
-}
-
-function initializeGame() {
-    // game setup
-    timer = 75;
-    document.getElementById("timer").innerHTML = "Time: " + timer
-    currentQuestion = 0;
-
-    var mainSection = document.getElementById("question-area");
-
-    var highScoresButton = document.createElement("button");
-    highScoresButton.id = "view-high-scores"
-    highScoresButton.innerHTML = "View High Scores";
-    highScoresButton.onclick = viewHighScores;
-    highScoresButton.className = "scoresBtn"
-
-    var title = document.createElement("h1");
-    title.innerHTML = "Welcome to the Game!";
-
-    var explanation = document.createElement("p");
-    explanation.innerHTML = "Try to answer the following JavaScript questions before the timer runs out."
-
-    var startGameButton = document.createElement("button");
-    startGameButton.innerHTML = "Start Quiz"
-    startGameButton.onclick = playGame;
-    startGameButton.className = "startBtn";
-
-    document.querySelector("body").prepend(highScoresButton);
-    mainSection.appendChild(title);
-    mainSection.appendChild(explanation);
-    mainSection.appendChild(startGameButton);
+    return JSON.parse(jsonValue);
 }
 
 initializeGame();
