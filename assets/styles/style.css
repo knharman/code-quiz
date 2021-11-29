@@ -2,6 +2,10 @@ body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+div {
+    margin-left: 100px;
+}
+
 button {
     background-color: purple; 
     color: white;

@@ -219,7 +219,22 @@ function setNewHighScore(event) {
 }
 
 function showGameOverScreen() {
-// to do
+    var questionArea = document.getElementById("question-area");
+    questionArea.innerHTML = ""
+
+    var gameOverMessage = document.createElement("h2");
+    gameOverMessage.innerHTML = "Game Over!";
+
+    var description = document.createElement("h4");
+    description.innerHTML = "You ran out of time.";
+
+    var startOverButton = document.createElement("button");
+    startOverButton.innerHTML = "View High Scores";
+    startOverButton.onclick = viewHighScores;
+
+    questionArea.appendChild(gameOverMessage);
+    questionArea.appendChild(description);
+    questionArea.appendChild(startOverButton);
 }
 
 
