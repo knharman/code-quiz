@@ -1,0 +1,52 @@
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+button {
+    background-color: purple; 
+    color: white;
+    font-size: large;
+    padding: 10px;
+    border-radius: 8px;
+    margin-right: 5px; 
+}
+
+button:hover {
+    background-color: rgb(190, 0, 190);
+}
+
+.optionBtn {
+    display: block;
+    margin-top: 10px;
+}
+
+.submitBtn {
+    font-size: medium;
+    margin-left: 10px;
+    background-color: purple; 
+    color: white;
+    font-size: large;
+    padding: 10px;
+    border-radius: 8px;
+    margin-right: 5px;
+}
+
+.scoresBtn {
+    color:purple;
+    background-color: white;
+    border: none; 
+    font-size: small;
+}
+
+#timer {
+    float: right;
+    margin: 0;
+}
+
+#question-area {
+    margin-left: 100px;
+}
+
+.startBtn {
+    margin-top: 10px;
+}

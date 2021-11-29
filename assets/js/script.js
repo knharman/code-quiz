@@ -48,12 +48,14 @@ function congrats() {
     var form = document.createElement("form");
     var initialsInput = document.createElement("input");
     initialsInput.setAttribute("type", "text");
+    initialsInput.setAttribute("placeholder", "Enter Initials");
     initialsInput.setAttribute("maxlength","3");
 
     var submitButton = document.createElement("input");
     submitButton.setAttribute("type", "button");
     submitButton.setAttribute("value","Submit");
     submitButton.onclick = setNewHighScore;
+    submitButton.className = "submitBtn"
 
     form.appendChild(initialsInput);
     form.appendChild(submitButton);
@@ -65,6 +67,10 @@ function congrats() {
 function setNewHighScore(event) {
     var initials = event.target.form[0].value;
     var highScore = timer;
+
+    if (initials == "") {
+        return;
+    }
 
     var currentHighScores = load("highScores");
     currentHighScores.push({
@@ -224,6 +230,7 @@ function createOptions(options, correctAnswerText, parent) {
         var option = document.createElement("button");
         option.innerHTML = options[i];
         option.onclick = chooseAnswer;
+        option.className = "optionBtn";
 
         if (options[i] == correctAnswerText) {
             option.setAttribute("correctAnswer", true);
@@ -276,6 +283,7 @@ function initializeGame() {
     highScoresButton.id = "view-high-scores"
     highScoresButton.innerHTML = "View High Scores";
     highScoresButton.onclick = viewHighScores;
+    highScoresButton.className = "scoresBtn"
 
     var title = document.createElement("h1");
     title.innerHTML = "Welcome to the Game!";
@@ -286,6 +294,7 @@ function initializeGame() {
     var startGameButton = document.createElement("button");
     startGameButton.innerHTML = "Start Quiz"
     startGameButton.onclick = playGame;
+    startGameButton.className = "startBtn";
 
     document.querySelector("body").prepend(highScoresButton);
     mainSection.appendChild(title);
