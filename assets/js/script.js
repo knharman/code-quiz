@@ -25,9 +25,79 @@ const questionArray = [
             "let",
             "const",
             "var",
-            "trim"
+            "trim",
         ],
         correctAnswer: "const",
+    },
+    {
+        question: "What operator is used to assign a value to a variable?",
+        options: [
+            "=",
+            "!=",
+            "*",
+            "+",
+        ],
+        correctAnswer: "=",
+    },
+    {
+        question: "What will the code return: Boolean(4<7)?",
+        options: [
+            "console error",
+            "NaN",
+            "false",
+            "true",
+        ],
+        correctAnswer: "true",
+    },
+    {
+        question: "How would you call a function called sayHello?",
+        options: [
+            "function sayHello",
+            "function sayHello()",
+            "sayHello[]",
+            "sayHello()",
+        ],
+        correctAnswer: "sayHello()",
+    },
+    {
+        question: "What is the string operator in JavaScript?",
+        options: [
+            "-",
+            "=",
+            "+",
+            "+=",
+        ],
+        correctAnswer: "+",
+    },
+    {
+        question: "Which of these represents the mathematical operator Modulus?",
+        options: [
+            "%",
+            "$",
+            "++",
+            "#",
+        ],
+        correctAnswer: "%",
+    },
+    {
+        question: "Objects group together a set of ________ and ________ to create a model of something you would recognize from the real world",
+        options: [
+            "variables and objects",
+            "variables and functions",
+            "functions and objects",
+            "functions and arrays",
+        ],
+        correctAnswer: "variables and functions",
+    },
+    {
+        question: "Values in an array are put in ________ and separated by commas",
+        options: [
+            "curly brackets",
+            "quotes",
+            "square brackets",
+            "parentheses",
+        ],
+        correctAnswer: "square brackets",
     },
 ]
 var currentQuestion = 0;
@@ -54,7 +124,7 @@ function initializeGame() {
     title.innerHTML = "Welcome to the Game!";
 
     var explanation = document.createElement("p");
-    explanation.innerHTML = "Try to answer the following JavaScript questions before the timer runs out."
+    explanation.innerHTML = "Try to answer the following JavaScript questions before the timer runs out. Keep in mind that incorrect answers will penalize your score/time by 10 seconds. Good luck!"
 
     var startGameButton = document.createElement("button");
     startGameButton.innerHTML = "Start Quiz"
